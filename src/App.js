@@ -1,44 +1,35 @@
-import { useState, useRef } from "react";
+import { useReducer, useRef } from "react";
 import "./App.css";
 
 function App() {
+  const initialState = { result: 0 };
   const inputRef = useRef(null);
-  const resultRef = useRef(null);
-  const [result, setResult] = useState(0);
 
-  function plus(e) {
-    e.preventDefault();
-    setResult((result) => result + Number(inputRef.current.value));
-  }
+  const calcReducer = (state, calcAction) => {
+    switch (calcAction.type) {
+      case "+":
+        return { ...state, result: state.result + calcAction.payload };
+      case "-":
+        return { ...state, result: state.result - calcAction.payload };
+      case "*":
+        return { ...state, result: state.result * calcAction.payload };
+      case "/":
+        return { ...state, result: state.result / calcAction.payload };
+      case "RESETinput":
+        inputRef.current.value = 0;
+        return { ...state };
+      case "RESETresult":
+        return { ...state, result: state.result * 0 };
+      default:
+        return { ...state };
+    }
+  };
 
-  function minus(e) {
-    // Add the code for the minus function
-    e.preventDefault();
-    setResult((result) => result - Number(inputRef.current.value));
-  }
-
-  function times(e) {
-    e.preventDefault();
-    setResult((result) => result * Number(inputRef.current.value));
-  }
-
-  function divide(e) {
-    // Add the code for the divide function
-    e.preventDefault();
-    setResult((result) => result / Number(inputRef.current.value));
-  }
-
-  function resetInput(e) {
-    // Add the code for the resetInput function
-    e.preventDefault();
-    inputRef.current.value = 0;
-  }
-
-  function resetResult(e) {
-    // Add the code for the resetResult function
-    e.preventDefault();
-    setResult(0);
-  }
+  const [state, dispatch] = useReducer(calcReducer, initialState);
+  const handleCalculation = (actionType) => {
+    const inputValue = Number(inputRef.current.value);
+    dispatch({ type: actionType, payload: inputValue });
+  };
 
   return (
     <div className="App">
@@ -46,19 +37,31 @@ function App() {
         <h1>Simplest Working Calculator</h1>
       </div>
       <form>
-        <p ref={resultRef}>{result}</p>
+        <p>{state.result}</p>
         <input
           pattern="[0-9]"
           ref={inputRef}
           type="number"
           placeholder="Type a number"
         />
-        <button onClick={plus}>Add</button>
-        <button onClick={minus}>Substract</button>
-        <button onClick={times}>Multiply</button>
-        <button onClick={divide}>Divide</button>
-        <button onClick={resetInput}>Reset input</button>
-        <button onClick={resetResult}>Reset result</button>
+        <button type="button" onClick={() => handleCalculation("+")}>
+          Add
+        </button>
+        <button type="button" onClick={() => handleCalculation("-")}>
+          Substract
+        </button>
+        <button type="button" onClick={() => handleCalculation("*")}>
+          Multiply
+        </button>
+        <button type="button" onClick={() => handleCalculation("/")}>
+          Divide
+        </button>
+        <button type="button" onClick={() => handleCalculation("RESETinput")}>
+          Reset input
+        </button>
+        <button type="button" onClick={() => handleCalculation("RESETresult")}>
+          Reset result
+        </button>
       </form>
     </div>
   );
