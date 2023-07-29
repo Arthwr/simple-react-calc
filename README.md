@@ -1,4 +1,4 @@
-# Simple calculator . Production Build
+# Simple calculator . Dev Build
 Simple calc made with React to learn and apply basic concepts
 
 
