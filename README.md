@@ -1,4 +1,4 @@
-# Simple calculator 
+# Simple calculator . Production Build
 Simple calc made with React to learn and apply basic concepts
 
 
@@ -9,3 +9,4 @@ Supports:
 - divide function
 - reset input function
 - reset result functions
+
